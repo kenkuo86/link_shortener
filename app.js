@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 const app = express()
 const PORT = process.env.PORT || 3000
 const linkShortener = require('./models/list-shortener')
+const transferredCodeGenerator = require('./transferredCodeGenerator')
 
 // 透過 mongoose 把應用程式 server 跟資料庫 server 進行連線
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -37,21 +38,25 @@ app.get('/', (req,res) => {
   res.render('index')
 })
 
+// 送出要縮短的網址
 app.post('/kk-link-shortener', (req,res) => {
   // 抓取傳過來的原始網址
   const originalLink = req.body.originalLink
   
-  // 產生相對應的縮短版網址
+  // 如果資料庫中已經有完全一樣的原始網址
+  // 直接進資料庫撈取 transferredCode 回傳
+
+  // 如果資料庫中沒有完全一樣的原始網址
+  // 產生相對應的 transferredCode 
   const transferredCode = '6y7UP'
 
   // 將兩者一起丟入資料庫中
   return linkShortener.create({originalLink, transferredCode})
       .then( () => res.render('result') )
       .catch( (error) => console.log(error) )
-  // render result 畫面
-  // res.render('result')
 })
 
+// 根據短網址撈取原網址
 app.get('/kk-link-shortener/6y7UP', (req,res) => {
   // 根據傳入的 id 抓取資料庫中相對應的原始網址
   const transferredCode = '6y7UP'
