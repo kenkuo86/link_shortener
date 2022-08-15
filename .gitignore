@@ -1,0 +1,18 @@
+# 常見的 gitignore 內容，未來可以直接複製貼上使用
+
+# OS X
+# mac 系統暫存檔
+.DS_Store*
+Icon?
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# npm
+node_modules
+# npm 產生的 log 檔案
+*.log
+*.gz
