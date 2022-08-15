@@ -43,23 +43,34 @@ app.post('/kk-link-shortener', (req,res) => {
   // 抓取傳過來的原始網址
   const originalLink = req.body.originalLink
   
-  // 如果資料庫中已經有完全一樣的原始網址
-  // 直接進資料庫撈取 transferredCode 回傳
+  linkShortener.findOne({originalLink})
+    .then( linkSet => {
 
-  // 如果資料庫中沒有完全一樣的原始網址
-  // 產生相對應的 transferredCode 
-  const transferredCode = '6y7UP'
+      // 如果資料庫中已經有完全一樣的原始網址
+      if (linkSet) {
+        // 直接進資料庫撈取 transferredCode 回傳
+        const code = linkSet.transferredCode
+        return res.render('result', { code })
+      } 
+      // 如果資料庫中沒有完全一樣的原始網址
+      else {
+        // 產生相對應的 transferredCode 
+        const transferredCode = transferredCodeGenerator()
 
-  // 將兩者一起丟入資料庫中
-  return linkShortener.create({originalLink, transferredCode})
-      .then( () => res.render('result') )
-      .catch( (error) => console.log(error) )
+        // 將兩者一起丟入資料庫中
+        return linkShortener.create({ originalLink, transferredCode })
+          .then(() => res.render('result', {code: transferredCode}))
+          .catch((error) => console.log(error))
+      }
+    })
+    .catch( error => console.log(error) )
+  
 })
 
 // 根據短網址撈取原網址
-app.get('/kk-link-shortener/6y7UP', (req,res) => {
+app.get('/kk-link-shortener/:code', (req,res) => {
   // 根據傳入的 id 抓取資料庫中相對應的原始網址
-  const transferredCode = '6y7UP'
+  const transferredCode = req.params.code
 
   linkShortener.findOne({transferredCode})
     .lean()  
@@ -69,6 +80,12 @@ app.get('/kk-link-shortener/6y7UP', (req,res) => {
     })
     .catch( error => console.log(error))
 })
+
+// app.get('/test', (req,res) => {
+//   linkShortener.findOne({ originalLink: 'https://www.google.com/'})
+//     .then( (linkSet) => console.log(linkSet))
+//     .catch( (error) => console.log(error) )
+// })
 
 app.listen(PORT, () => {
   console.log(`server is running on http://localhost:${PORT}`)
