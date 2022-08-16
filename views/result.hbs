@@ -7,5 +7,19 @@
   </div>
 
   <h4> 成功建立短網址！請使用以下連結：</h4>
-  <h5><a href="./kk-link-shortener/{{code}}">http://localhost:3000/kk-link-shortener/{{code}}</a></h5>  
+  <h5><a id="result" href="./kk-link-shortener/{{code}}">http://localhost:3000/kk-link-shortener/{{code}}</a></h5>  
+
+  <button class="btn btn-primary" id="copyBtn">Copy</button>
 </div>
+
+<script>
+  const copyBtn = document.querySelector('#copyBtn')
+
+  copyBtn.addEventListener('click', function copyToClipBoard() {
+    const content = document.querySelector('#result')
+    const link = content.innerText
+
+    navigator.clipboard.writeText(link)
+    alert('連結已複製到剪貼簿')
+  })
+</script>
