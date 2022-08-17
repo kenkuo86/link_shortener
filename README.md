@@ -17,15 +17,23 @@
 要在你的本地端運行此專案，請參考以下步驟
 
 1. 下載專案
-<code> git clone https://github.com/kenkuo86/link_shortener.git </code>
+```
+git clone https://github.com/kenkuo86/link_shortener.git
+```
 
 2. 打開終端機，移動到專案資料夾後，下載專案所需模組
-<code> npm install </code>
+```
+npm install
+```
 
 3. 模組安裝完後，輸入：
-<code> npm run start </code>
+```
+npm run start
+```
 
 4. 看到以下訊息代表成功運行
-<code> server is running on http://localhost:3000  mongodb connected!</code>
+```
+server is running on http://localhost:3000  mongodb connected!
+```
 
 5. 到 http://localhost:3000 即可開始使用專案功能
